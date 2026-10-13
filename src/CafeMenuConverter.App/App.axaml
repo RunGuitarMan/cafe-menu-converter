@@ -1,9 +1,134 @@
-<Application xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="CafeMenuConverter.App.App" Name="Конвертер меню" RequestedThemeVariant="Light">
+<Application xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="CafeMenuConverter.App.App" Name="Конвертер меню" RequestedThemeVariant="Light">
+  <Application.Resources>
+    <ResourceDictionary>
+    <ResourceDictionary.MergedDictionaries>
+      <ResourceInclude Source="/Assets/AppIcon.axaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <FontFamily x:Key="BodyFont">avares://CafeMenuConverter.App/Assets/Fonts#NeueHaasUnicaW1G-Regular</FontFamily>
+    <FontFamily x:Key="BodyMediumFont">avares://CafeMenuConverter.App/Assets/Fonts#NeueHaasUnicaW1G-Medium</FontFamily>
+    <FontFamily x:Key="BodyBoldFont">avares://CafeMenuConverter.App/Assets/Fonts#NeueHaasUnicaW1G-Bold</FontFamily>
+    <FontFamily x:Key="DisplayFont">avares://CafeMenuConverter.App/Assets/Fonts#T-Sans</FontFamily>
+    <SolidColorBrush x:Key="CanvasBrush">#F5F4F0</SolidColorBrush>
+    <SolidColorBrush x:Key="InkBrush">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="MutedBrush">#737373</SolidColorBrush>
+    <SolidColorBrush x:Key="LineBrush">#E3E2DB</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentBrush">#FFDD2D</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonBackground">White</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonForeground">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonBorderBrush">#DCDDD5</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonBackgroundPointerOver">#F5F4EF</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver">#B8BEB0</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonForegroundPointerOver">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonBackgroundPressed">#ECEDE5</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonBorderBrushPressed">#909988</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonForegroundPressed">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonBackgroundDisabled">#F7F7F3</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonBorderBrushDisabled">#E8E8E1</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonForegroundDisabled">#969B90</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonBackground">#FFDD2D</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonBorderBrush">#FFDD2D</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonForeground">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver">#FCC521</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonBorderBrushPointerOver">#FCC521</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonForegroundPointerOver">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonBackgroundPressed">#FAB619</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonBorderBrushPressed">#FAB619</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonForegroundPressed">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonBackgroundDisabled">#FFF1BD</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonBorderBrushDisabled">#FFF1BD</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentButtonForegroundDisabled">#988B5F</SolidColorBrush>
+    <SolidColorBrush x:Key="TextControlBackground">#FCFCFA</SolidColorBrush>
+    <SolidColorBrush x:Key="TextControlForeground">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="TextControlBorderBrush">#DCDDD5</SolidColorBrush>
+    <SolidColorBrush x:Key="TextControlBackgroundPointerOver">White</SolidColorBrush>
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver">#B8BEB0</SolidColorBrush>
+    <SolidColorBrush x:Key="TextControlBackgroundFocused">White</SolidColorBrush>
+    <SolidColorBrush x:Key="TextControlBorderBrushFocused">#A58A29</SolidColorBrush>
+    <SolidColorBrush x:Key="TextControlSelectionHighlightColor">#FFE9A0</SolidColorBrush>
+    <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
+    <SolidColorBrush x:Key="ComboBoxBackground">#FCFCFA</SolidColorBrush>
+    <SolidColorBrush x:Key="ComboBoxForeground">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="ComboBoxBorderBrush">#DCDDD5</SolidColorBrush>
+    <SolidColorBrush x:Key="ComboBoxPlaceHolderForeground">#737373</SolidColorBrush>
+    <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver">White</SolidColorBrush>
+    <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver">#B8BEB0</SolidColorBrush>
+    <SolidColorBrush x:Key="ComboBoxBackgroundPressed">#F5F4EF</SolidColorBrush>
+    <SolidColorBrush x:Key="ComboBoxBorderBrushPressed">#A58A29</SolidColorBrush>
+    <SolidColorBrush x:Key="TabItemHeaderForegroundSelected">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="TabItemHeaderForegroundUnselected">#737373</SolidColorBrush>
+    <SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">#FFDD2D</SolidColorBrush>
+    <SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver">#F8F7F2</SolidColorBrush>
+    <Thickness x:Key="TabControlTopPlacementItemMargin">0</Thickness>
+    </ResourceDictionary>
+  </Application.Resources>
   <Application.Styles>
-    <FluentTheme />
+    <FluentTheme>
+      <FluentTheme.Palettes>
+        <ColorPaletteResources x:Key="Light" Accent="#B18C21" />
+      </FluentTheme.Palettes>
+    </FluentTheme>
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
-    <Style Selector="Button"><Setter Property="Padding" Value="16,10"/><Setter Property="CornerRadius" Value="7"/></Style>
-    <Style Selector="TextBox"><Setter Property="MinHeight" Value="42"/><Setter Property="CornerRadius" Value="6"/></Style>
-    <Style Selector="TextBlock.label"><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Margin" Value="0,0,0,7"/></Style>
+    <Style Selector="Window">
+      <Setter Property="Icon" Value="/Assets/app-icon.ico"/>
+      <Setter Property="Background" Value="{StaticResource CanvasBrush}"/>
+      <Setter Property="Foreground" Value="{StaticResource InkBrush}"/>
+      <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
+      <Setter Property="FontSize" Value="13"/>
+    </Style>
+    <Style Selector="Button">
+      <Setter Property="Height" Value="40"/><Setter Property="Padding" Value="16,8"/>
+      <Setter Property="CornerRadius" Value="8"/><Setter Property="FontSize" Value="13"/>
+      <Setter Property="FontFamily" Value="{StaticResource BodyMediumFont}"/><Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.accent"><Setter Property="FontFamily" Value="{StaticResource BodyMediumFont}"/></Style>
+    <Style Selector="TextBox">
+      <Setter Property="Height" Value="40"/><Setter Property="MinHeight" Value="40"/>
+      <Setter Property="CornerRadius" Value="8"/><Setter Property="FontSize" Value="13"/>
+      <Setter Property="Padding" Value="12,9"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="ComboBox">
+      <Setter Property="Height" Value="40"/><Setter Property="MinHeight" Value="40"/>
+      <Setter Property="CornerRadius" Value="8"/><Setter Property="FontSize" Value="13"/>
+      <Setter Property="Padding" Value="12,9"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+    <Style Selector="TextBlock.label">
+      <Setter Property="FontFamily" Value="{StaticResource BodyMediumFont}"/><Setter Property="FontSize" Value="12"/>
+      <Setter Property="Foreground" Value="#555555"/><Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+    <Style Selector="TextBlock.muted"><Setter Property="Foreground" Value="{StaticResource MutedBrush}"/></Style>
+    <Style Selector="TextBlock.section">
+      <Setter Property="FontSize" Value="11"/><Setter Property="FontFamily" Value="{StaticResource BodyMediumFont}"/>
+      <Setter Property="LetterSpacing" Value="1"/><Setter Property="Foreground" Value="{StaticResource MutedBrush}"/>
+    </Style>
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="White"/><Setter Property="BorderBrush" Value="{StaticResource LineBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/><Setter Property="CornerRadius" Value="12"/>
+    </Style>
+    <Style Selector="TabControl"><Setter Property="Padding" Value="0"/></Style>
+    <Style Selector="TabItem">
+      <Setter Property="FontSize" Value="13"/><Setter Property="FontFamily" Value="{StaticResource BodyMediumFont}"/>
+      <Setter Property="MinHeight" Value="48"/><Setter Property="Padding" Value="16,0"/>
+    </Style>
+    <Style Selector="TabItem:selected"><Setter Property="FontFamily" Value="{StaticResource BodyBoldFont}"/></Style>
+    <Style Selector="DataGrid">
+      <Setter Property="BorderThickness" Value="0"/><Setter Property="RowHeight" Value="40"/>
+      <Setter Property="ColumnHeaderHeight" Value="38"/><Setter Property="FontSize" Value="12"/>
+      <Setter Property="HorizontalGridLinesBrush" Value="#EFEEE8"/>
+    </Style>
+    <Style Selector="DataGridColumnHeader">
+      <Setter Property="Background" Value="#F8F8F4"/><Setter Property="Foreground" Value="#737373"/>
+      <Setter Property="FontSize" Value="11"/><Setter Property="FontFamily" Value="{StaticResource BodyMediumFont}"/>
+      <Setter Property="Padding" Value="12,0,0,0"/>
+      <Setter Property="SeparatorBrush" Value="#E9E8E1"/>
+    </Style>
+    <Style Selector="DataGridCell"><Setter Property="FontSize" Value="12"/></Style>
+    <Style Selector="DataGridCell TextBlock">
+      <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+      <Setter Property="ToolTip.Tip" Value="{ReflectionBinding Text, RelativeSource={RelativeSource Self}}"/>
+    </Style>
   </Application.Styles>
 </Application>

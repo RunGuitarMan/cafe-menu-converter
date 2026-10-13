@@ -4,15 +4,21 @@
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <PublishTrimmed>false</PublishTrimmed><Version>1.0.0</Version>
+    <PublishTrimmed>false</PublishTrimmed><Version>1.1.0</Version>
     <RuntimeFrameworkVersion Condition="'$(SelfContained)' == 'true'">10.0.12</RuntimeFrameworkVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/app-icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.22" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.13" />
     <ProjectReference Include="../CafeMenuConverter.Core/CafeMenuConverter.Core.csproj" />
-    <Content Include="../../config/categories.json" Link="categories.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <AvaloniaResource Include="Assets/app-icon.ico" />
+    <AvaloniaResource Include="Assets/app-icon.png" />
+    <AvaloniaResource Include="Assets/Fonts/*.ttf" />
+    <EmbeddedResource Include="../../THIRD-PARTY-NOTICES.txt" LogicalName="Licenses.THIRD-PARTY-NOTICES.txt" />
+    <EmbeddedResource Include="../../build/licenses/*.txt" LogicalName="Licenses.%(Filename)%(Extension)" />
   </ItemGroup>
+  <Import Project="../../build/Standalone.props" />
 </Project>

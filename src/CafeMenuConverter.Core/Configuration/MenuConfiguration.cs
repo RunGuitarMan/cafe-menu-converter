@@ -7,7 +7,28 @@ public sealed record MenuConfiguration(string[] Categories)
 {
     public static MenuConfiguration Load(string path)
     {
-        var config = JsonSerializer.Deserialize<MenuConfiguration>(File.ReadAllText(path), new JsonSerializerOptions
+        using var stream = File.OpenRead(path);
+        return Read(stream);
+    }
+
+    public static MenuConfiguration LoadDefault()
+    {
+        using var stream = typeof(MenuConfiguration).Assembly.GetManifestResourceStream("CafeMenuConverter.DefaultCategories.json")
+            ?? throw new InvalidOperationException("В приложении отсутствуют встроенные категории.");
+        return Read(stream);
+    }
+
+    public static MenuConfiguration LoadOrDefault(string path)
+    {
+        // Only absence permits a fallback. Invalid or inaccessible overrides must be reported.
+        try { return Load(path); }
+        catch (FileNotFoundException) { return LoadDefault(); }
+        catch (DirectoryNotFoundException) { return LoadDefault(); }
+    }
+
+    private static MenuConfiguration Read(Stream stream)
+    {
+        var config = JsonSerializer.Deserialize<MenuConfiguration>(stream, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow

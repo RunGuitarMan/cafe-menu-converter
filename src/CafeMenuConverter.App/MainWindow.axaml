@@ -1,63 +1,133 @@
 <Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="using:CafeMenuConverter.App" xmlns:model="using:CafeMenuConverter.Core.Model"
         x:Class="CafeMenuConverter.App.MainWindow" x:DataType="local:MainViewModel"
-        Title="Кафе · Конвертер меню" Width="1060" Height="820" MinWidth="800" MinHeight="680"
-        Background="#F5F4F0" FontFamily="Segoe UI, Arial" FontSize="14">
-  <Grid RowDefinitions="Auto,Auto,Auto,*" Margin="24" RowSpacing="14">
-    <Grid ColumnDefinitions="*,Auto">
-      <StackPanel Spacing="5">
-        <TextBlock Text="Меню в таблицу" FontSize="28" FontWeight="Bold" Foreground="#232822"/>
-        <TextBlock Text="PDF завтрака или обеда → XLSX для загрузки" Foreground="#62685F"/>
+        Title="Кафе · Конвертер меню" Width="1060" Height="820" MinWidth="800" MinHeight="680">
+  <Grid RowDefinitions="Auto,Auto,*" Margin="24" RowSpacing="18">
+    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,2">
+      <StackPanel Spacing="4">
+        <TextBlock Text="Меню в таблицу" FontFamily="{StaticResource DisplayFont}" FontSize="28" FontWeight="Bold"/>
+        <TextBlock Text="PDF завтрака или обеда → XLSX для загрузки" Classes="muted"/>
       </StackPanel>
-      <Border Grid.Column="1" Background="#FFD14A" CornerRadius="8" Padding="17,11" VerticalAlignment="Center">
-        <TextBlock Text="КАФЕ" FontWeight="Bold" FontSize="18"/>
-      </Border>
+      <Image Grid.Column="1" Source="{StaticResource MenuAppIcon}" Width="52" Height="52" VerticalAlignment="Center"
+             AutomationProperties.Name="Конвертер меню"/>
     </Grid>
-    <Border Grid.Row="1" Background="White" BorderBrush="#DEDCD4" BorderThickness="1" CornerRadius="12" Padding="18" DragDrop.AllowDrop="True" Name="DropArea">
-      <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="14" IsEnabled="{Binding IsIdle}">
-        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-          <StackPanel><TextBlock Text="1. PDF меню" Classes="label"/>
-            <TextBox Text="{Binding InputPath}" Watermark="Выберите файл или перетащите его сюда" Name="InputPathBox"/>
-          </StackPanel>
-          <Button Grid.Column="1" Content="Выбрать…" VerticalAlignment="Bottom" Click="ChoosePdf"/>
+
+    <Border Grid.Row="1" Classes="card" DragDrop.AllowDrop="True" Name="DropArea">
+      <Grid RowDefinitions="Auto,Auto">
+        <Grid RowDefinitions="Auto,Auto" RowSpacing="18" Margin="20" IsEnabled="{Binding IsIdle}">
+          <Grid ColumnDefinitions="*,116" ColumnSpacing="12">
+            <StackPanel>
+              <TextBlock Text="PDF меню" Classes="label"/>
+              <TextBox Text="{Binding InputPath}" Watermark="Выберите PDF или перетащите его сюда" Name="InputPathBox"
+                       ToolTip.Tip="{Binding InputPath}" AutomationProperties.Name="PDF меню"/>
+            </StackPanel>
+            <Button Grid.Column="1" Content="Выбрать…" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Click="ChoosePdf"/>
+          </Grid>
+          <Grid Grid.Row="1" ColumnDefinitions="180,*,116" ColumnSpacing="12">
+            <StackPanel>
+              <TextBlock Text="Офис" Classes="label"/>
+              <ComboBox ItemsSource="{Binding Offices}" SelectedItem="{Binding SelectedOffice}" PlaceholderText="Выберите офис" Name="OfficeBox" AutomationProperties.Name="Офис"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+              <TextBlock Text="Сохранить XLSX" Classes="label"/>
+              <TextBox Text="{Binding OutputPath}" Watermark="Рядом с исходным PDF" Name="OutputPathBox"
+                       ToolTip.Tip="{Binding OutputPath}" AutomationProperties.Name="Путь сохранения XLSX"/>
+            </StackPanel>
+            <Button Grid.Column="2" Content="Изменить…" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Click="ChooseOutput"/>
+          </Grid>
         </Grid>
-        <Grid Grid.Row="1" ColumnDefinitions="190,*,Auto" ColumnSpacing="16">
-          <StackPanel><TextBlock Text="2. Офис" Classes="label"/>
-            <ComboBox ItemsSource="{Binding Offices}" SelectedItem="{Binding SelectedOffice}" PlaceholderText="Выберите офис" HorizontalAlignment="Stretch" MinHeight="42" Name="OfficeBox"/>
-          </StackPanel>
-          <StackPanel Grid.Column="1"><TextBlock Text="3. Куда сохранить XLSX" Classes="label"/>
-            <TextBox Text="{Binding OutputPath}" Watermark="По умолчанию — рядом с PDF" Name="OutputPathBox"/>
-          </StackPanel>
-          <Button Grid.Column="2" Content="Изменить…" VerticalAlignment="Bottom" Click="ChooseOutput"/>
-        </Grid>
-        <TextBlock Grid.Row="2" Text="Обработка на вашем компьютере. Названия, состав и категории — как в меню." TextWrapping="Wrap" Foreground="#62685F" FontSize="12"/>
+        <Border Grid.Row="1" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0" Padding="20,14">
+          <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+            <StackPanel VerticalAlignment="Center" Spacing="5" Margin="0,0,12,0">
+              <SelectableTextBlock Text="{Binding Status}" TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource MutedBrush}"/>
+              <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Height="3" Foreground="{StaticResource AccentBrush}" Background="#E9E8E0"/>
+            </StackPanel>
+            <Button Grid.Column="1" Content="Отмена" Click="Cancel" IsVisible="{Binding IsBusy}"/>
+            <Button Grid.Column="2" Content="Конвертировать" Classes="accent" MinWidth="156" Click="Convert" IsEnabled="{Binding CanConvert}" Name="ConvertButton"/>
+          </Grid>
+        </Border>
       </Grid>
     </Border>
-    <StackPanel Grid.Row="2" Spacing="10">
-      <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12">
-        <Button Content="Конвертировать" Click="Convert" IsEnabled="{Binding CanConvert}" Background="#FFD14A" Foreground="#232822" FontWeight="Bold" Name="ConvertButton"/>
-        <Button Grid.Column="1" Content="Отмена" Click="Cancel" IsVisible="{Binding IsBusy}"/>
-        <Button Grid.Column="3" Content="Открыть папку" Click="OpenFolder" IsEnabled="{Binding CanOpenFolder}"/>
-      </Grid>
-      <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Height="3"/>
-      <SelectableTextBlock Text="{Binding Status}" TextWrapping="Wrap" Foreground="#394234"/>
-    </StackPanel>
-    <Border Grid.Row="3" Background="White" BorderBrush="#DEDCD4" BorderThickness="1" CornerRadius="12" Padding="12">
-      <TabControl FontSize="14">
-        <TabItem Header="Сводка"><ScrollViewer Margin="10"><SelectableTextBlock Text="{Binding Summary}" TextWrapping="Wrap"/></ScrollViewer></TabItem>
-        <TabItem Header="Блюда">
-          <DataGrid ItemsSource="{Binding Items}" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True" GridLinesVisibility="Horizontal" Margin="0,8,0,0">
-            <DataGrid.Columns>
-              <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}" Width="110"/>
-              <DataGridTextColumn Header="Раздел" Binding="{Binding Category}" Width="190"/>
-              <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="450"/>
-              <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="80"/>
-              <DataGridTextColumn Header="Стр." Binding="{Binding Page}" Width="60"/>
-            </DataGrid.Columns>
-          </DataGrid>
+
+    <Border Grid.Row="2" Classes="card" ClipToBounds="True">
+      <Grid>
+      <TabControl Name="ResultTabs">
+        <TabItem Header="Сводка">
+          <Grid>
+            <StackPanel IsVisible="{Binding !HasItems}" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10" Margin="24">
+              <Border Background="#F6F5EF" CornerRadius="12" Width="52" Height="52" HorizontalAlignment="Center" Margin="0,0,0,4">
+                <Panel Width="24" Height="28" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <Path Data="M 4,1 L 16,1 L 23,8 L 23,27 L 4,27 Z M 16,1 L 16,8 L 23,8" Stroke="#909887" StrokeThickness="1.4"/>
+                  <Path Data="M 8,13 L 19,13 M 8,18 L 19,18 M 8,23 L 15,23" Stroke="#B4983E" StrokeThickness="1.4"/>
+                </Panel>
+              </Border>
+              <TextBlock Text="Здесь появится ваше меню" FontFamily="{StaticResource DisplayFont}" FontWeight="Medium" FontSize="17" HorizontalAlignment="Center"/>
+              <TextBlock Text="После конвертации — блюда, даты и результаты проверки" Classes="muted" FontSize="12" TextAlignment="Center" TextWrapping="Wrap"/>
+            </StackPanel>
+            <ScrollViewer IsVisible="{Binding HasItems}">
+              <StackPanel Margin="22,16,22,22" Spacing="22">
+                <Grid ColumnDefinitions="*,*,*">
+                  <StackPanel Spacing="2"><TextBlock Text="{Binding Items.Count}" FontFamily="{StaticResource DisplayFont}" FontSize="28" FontWeight="Medium"/><TextBlock Text="блюд в меню" Classes="muted" FontSize="12"/></StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="2"><TextBlock Text="{Binding DaySummaries.Count}" FontFamily="{StaticResource DisplayFont}" FontSize="28" FontWeight="Medium"/><TextBlock Text="дней" Classes="muted" FontSize="12"/></StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="2"><TextBlock Text="{Binding CategorySummaries.Count}" FontFamily="{StaticResource DisplayFont}" FontSize="28" FontWeight="Medium"/><TextBlock Text="разделов" Classes="muted" FontSize="12"/></StackPanel>
+                </Grid>
+                <Border Height="1" Background="{StaticResource LineBrush}"/>
+                <Grid ColumnDefinitions="2*,3*" ColumnSpacing="36">
+                  <StackPanel Spacing="12">
+                    <TextBlock Text="ПО ДНЯМ" Classes="section"/>
+                    <ItemsControl ItemsSource="{Binding DaySummaries}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:MainViewModel+SummaryRow">
+                          <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,12" ColumnSpacing="12">
+                            <StackPanel Spacing="2"><TextBlock Text="{Binding Label}" FontFamily="{StaticResource BodyMediumFont}"/><TextBlock Text="{Binding Detail}" Classes="muted" FontSize="11"/></StackPanel>
+                            <TextBlock Grid.Column="1" Text="{Binding Count}" Classes="muted" VerticalAlignment="Center"/>
+                          </Grid>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="12">
+                    <TextBlock Text="ПО РАЗДЕЛАМ" Classes="section"/>
+                    <ItemsControl ItemsSource="{Binding CategorySummaries}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:MainViewModel+SummaryRow">
+                          <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,12" ColumnSpacing="16">
+                            <TextBlock Text="{Binding Label}" TextWrapping="Wrap" FontSize="12"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Count}" Classes="muted" FontSize="12"/>
+                          </Grid>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </Grid>
+              </StackPanel>
+            </ScrollViewer>
+          </Grid>
         </TabItem>
-        <TabItem Header="Диагностика"><ScrollViewer Margin="10"><SelectableTextBlock Text="{Binding Diagnostics}" TextWrapping="Wrap"/></ScrollViewer></TabItem>
+        <TabItem Header="Блюда">
+          <Grid>
+            <TextBlock IsVisible="{Binding !HasItems}" Text="Распознанные блюда появятся здесь после конвертации" Classes="muted" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="24"/>
+            <DataGrid IsVisible="{Binding HasItems}" ItemsSource="{Binding Items}" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True" GridLinesVisibility="Horizontal" Name="DishesGrid">
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}" Width="110"/>
+                <DataGridTextColumn Header="Раздел" Binding="{Binding Category}" Width="180"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*" MinWidth="250"/>
+                <DataGridTextColumn Header="Цена, ₽" Binding="{Binding Price}" Width="90"/>
+                <DataGridTextColumn Header="Стр." Binding="{Binding Page}" Width="68"/>
+              </DataGrid.Columns>
+            </DataGrid>
+          </Grid>
+        </TabItem>
+        <TabItem Header="Диагностика">
+          <Grid>
+            <TextBlock IsVisible="{Binding !HasDiagnostics}" Text="{Binding DiagnosticsPlaceholder}" Classes="muted" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="24"/>
+            <ScrollViewer IsVisible="{Binding HasDiagnostics}" Margin="22,18"><SelectableTextBlock Text="{Binding Diagnostics}" TextWrapping="Wrap" FontSize="13" LineHeight="22"/></ScrollViewer>
+          </Grid>
+        </TabItem>
       </TabControl>
+      <Button Content="Открыть папку ↗" Click="OpenFolder" IsVisible="{Binding CanOpenFolder}" Name="OpenFolderButton"
+              HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,12,0" Height="32" FontSize="12" Padding="12,4"/>
+      </Grid>
     </Border>
   </Grid>
 </Window>

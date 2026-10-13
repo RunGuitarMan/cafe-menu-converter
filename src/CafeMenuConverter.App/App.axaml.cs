@@ -10,7 +10,11 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
             desktop.MainWindow = new MainWindow();
+            if (desktop.Args is ["--verify-release", var fixtures, var reportDirectory])
+                ReleaseVerification.Attach(desktop, fixtures, reportDirectory);
+        }
         base.OnFrameworkInitializationCompleted();
     }
 }

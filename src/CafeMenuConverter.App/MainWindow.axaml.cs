@@ -71,7 +71,7 @@ public partial class MainWindow : Window
     {
         var dialog = new Window { Title = "Заменить файл?", Width = 540, SizeToContent = SizeToContent.Height,
             CanResize = false, WindowStartupLocation = WindowStartupLocation.CenterOwner };
-        var yes = new Button { Content = "Заменить", Background = Avalonia.Media.Brush.Parse("#FFD14A") };
+        var yes = new Button { Content = "Заменить", Classes = { "accent" } };
         var no = new Button { Content = "Отмена", IsCancel = true };
         yes.Click += (_, _) => dialog.Close(true);
         no.Click += (_, _) => dialog.Close(false);

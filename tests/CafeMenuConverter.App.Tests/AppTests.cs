@@ -11,7 +11,9 @@ namespace CafeMenuConverter.App.Tests;
 
 public static class TestAppBuilder
 {
-    public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>().UseHeadless(new AvaloniaHeadlessPlatformOptions());
+    public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()
+        .UseSkia()
+        .UseHeadless(new AvaloniaHeadlessPlatformOptions { UseHeadlessDrawing = false });
 }
 
 public class AppTests
@@ -36,7 +38,8 @@ public class AppTests
     public async Task Conversion_saves_and_declined_overwrite_preserves_file()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ui-menu-{Guid.NewGuid():N}.xlsx");
-        var model = new MainViewModel { InputPath = Path.Combine(AppContext.BaseDirectory, "breakfast.pdf"), SelectedOffice = Office.Oko, OutputPath = path };
+        var model = new MainViewModel(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"), "categories.json"))
+            { InputPath = Path.Combine(AppContext.BaseDirectory, "breakfast.pdf"), SelectedOffice = Office.Oko, OutputPath = path };
         try
         {
             await model.ConvertAsync(_ => throw new Exception("No overwrite expected"));
@@ -53,6 +56,34 @@ public class AppTests
             Assert.False(model.IsBusy);
         }
         finally { File.Delete(path); }
+    }
+
+    [Fact]
+    public async Task Existing_override_is_used_and_invalid_override_blocks_conversion()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"config-test-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(directory);
+        var config = Path.Combine(directory, "categories.json");
+        var output = Path.Combine(directory, "output.xlsx");
+        var model = new MainViewModel(config)
+            { InputPath = Path.Combine(AppContext.BaseDirectory, "breakfast.pdf"), SelectedOffice = Office.Oko, OutputPath = output };
+        try
+        {
+            File.WriteAllText(config, "{\"categories\":[\"Только новый раздел\"]}");
+            await model.ConvertAsync(_ => Task.FromResult(false));
+            Assert.Contains("Неизвестный раздел", model.Diagnostics);
+            Assert.False(File.Exists(output));
+            File.WriteAllText(config, "{}");
+            await model.ConvertAsync(_ => Task.FromResult(false));
+            Assert.Contains("непустой список", model.Diagnostics);
+            Assert.Contains(config, model.Diagnostics);
+            Assert.False(File.Exists(output));
+            File.Delete(config);
+            await model.ConvertAsync(_ => Task.FromResult(false));
+            Assert.True(model.CanOpenFolder, model.Diagnostics);
+            Assert.Equal(145, model.Items.Count);
+        }
+        finally { Directory.Delete(directory, true); }
     }
 
     [Fact]

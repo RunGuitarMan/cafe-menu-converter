@@ -1,13 +1,12 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using CafeMenuConverter.Core;
-using CafeMenuConverter.Core.Configuration;
 using CafeMenuConverter.Core.Export;
 using CafeMenuConverter.Core.Model;
 
 namespace CafeMenuConverter.App;
 
-public sealed class MainViewModel : INotifyPropertyChanged
+public sealed class MainViewModel(string? configurationPath = null) : INotifyPropertyChanged
 {
     private string inputPath = "", outputPath = "", status = "Выберите PDF и офис, затем нажмите «Конвертировать».";
     private Office? office;
@@ -39,6 +38,15 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public string Diagnostics { get; private set; } = "";
     public IReadOnlyList<MenuItem> Items { get; private set; } = [];
     public string SavedPath { get; private set; } = "";
+    public bool HasItems => Items.Count > 0;
+    public bool HasDiagnostics => Diagnostics.Length > 0;
+    public string DiagnosticsPlaceholder => HasItems ? "Проверка завершена. Замечаний нет." : "После конвертации здесь появятся результаты проверки меню.";
+    public IReadOnlyList<SummaryRow> DaySummaries => Items.GroupBy(i => (i.Date, i.MealType))
+        .OrderBy(g => g.Key.Date).Select(g => new SummaryRow(g.Key.Date.ToString("dd.MM.yyyy"), g.Key.MealType.ToString(), g.Count())).ToArray();
+    public IReadOnlyList<SummaryRow> CategorySummaries => Items.GroupBy(i => i.Category)
+        .Select(g => new SummaryRow(g.Key, "", g.Count())).ToArray();
+
+    public sealed record SummaryRow(string Label, string Detail, int Count);
 
     public async Task ConvertAsync(Func<string, Task<bool>> confirmOverwrite)
     {
@@ -58,7 +66,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             var token = cancellation.Token;
             var result = await Task.Run(() =>
             {
-                var config = MenuConfiguration.Load(Path.Combine(AppContext.BaseDirectory, "categories.json"));
+                var config = AppConfiguration.Load(configurationPath);
                 return new MenuConverter(config).Convert(input, token);
             }, token);
             Items = result.Items;
@@ -67,7 +75,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 .OrderBy(g => g.Key.Date).Select(g => $"{g.Key.Date:dd.MM.yyyy} · {g.Key.MealType} · блюд: {g.Count()}")) +
                 Environment.NewLine + Environment.NewLine + string.Join(Environment.NewLine,
                     result.Items.GroupBy(i => i.Category).Select(g => $"{g.Key}: {g.Count()}"));
-            Changed(nameof(Items)); Changed(nameof(Diagnostics)); Changed(nameof(Summary));
+            NotifyResultChanged();
             if (!result.Success) { Status = "Обнаружены ошибки. XLSX не сохранён. Подробности — во вкладке «Диагностика»."; return; }
             token.ThrowIfCancellationRequested();
             var overwrite = File.Exists(output);
@@ -85,6 +93,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 ? $"{ex.Message}\nПроверьте доступ к папке. Если XLSX открыт в Excel, закройте его и повторите попытку."
                 : ex.Message;
             Changed(nameof(Diagnostics));
+            Changed(nameof(HasDiagnostics));
         }
         finally { cancellation.Dispose(); cancellation = null; IsBusy = false; }
     }
@@ -95,7 +104,13 @@ public sealed class MainViewModel : INotifyPropertyChanged
     {
         SavedPath = ""; Items = []; Diagnostics = "";
         Summary = "Здесь появятся даты, количество блюд и разделы меню.";
-        Changed(nameof(Items)); Changed(nameof(Diagnostics)); Changed(nameof(Summary)); Changed(nameof(CanOpenFolder));
+        NotifyResultChanged(); Changed(nameof(CanOpenFolder));
+    }
+    private void NotifyResultChanged()
+    {
+        Changed(nameof(Items)); Changed(nameof(Diagnostics)); Changed(nameof(Summary));
+        Changed(nameof(HasItems)); Changed(nameof(HasDiagnostics)); Changed(nameof(DiagnosticsPlaceholder));
+        Changed(nameof(DaySummaries)); Changed(nameof(CategorySummaries));
     }
     private void Changed([CallerMemberName] string? name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

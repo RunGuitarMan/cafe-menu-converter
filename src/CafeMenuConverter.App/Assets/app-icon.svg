@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<title>Конвертер меню — фисташковая клетка</title>
+<desc>Фон напоминает скатерть кафе и ячейки таблицы. Контуры щита и буквы взяты без изменений из официального SVG Т-Банка.</desc>
+<defs>
+  <clipPath id="tile"><rect x="48" y="48" width="928" height="928" rx="204"/></clipPath>
+  <linearGradient id="base" x1="0" y1="0" x2=".85" y2="1">
+    <stop stop-color="#E1E8CC"/><stop offset="1" stop-color="#A8BC90"/>
+  </linearGradient>
+  <pattern id="cells" width="350" height="350" patternUnits="userSpaceOnUse" patternTransform="translate(22 5) rotate(-12 512 512)">
+    <rect width="175" height="175" fill="#F6F6E5" opacity=".35"/>
+    <rect x="175" y="175" width="175" height="175" fill="#F6F6E5" opacity=".35"/>
+  </pattern>
+  <radialGradient id="light" cx=".1" cy=".08" r="1.1">
+    <stop stop-color="#FFFFFF" stop-opacity=".26"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<g clip-path="url(#tile)">
+  <rect x="48" y="48" width="928" height="928" fill="url(#base)"/>
+  <rect x="48" y="48" width="928" height="928" fill="url(#cells)"/>
+  <rect x="48" y="48" width="928" height="928" fill="url(#light)"/>
+  <g transform="translate(242 254) scale(3.52)">
+    <path d="M0,0h153.407196v77.1526337c0,19.7785492-10.5512848,38.0552139-27.6790314,47.9455261    l-49.0245285,28.3088531l-49.0244598-28.3088531C10.5510798,115.2078476,0,96.9311829,0,77.1526337V0z" fill="#FFFFFF"/>
+    <path d="M42.1017799,40.607338v23.996109    c3.2813759-3.7054443,9.2474632-6.2132874,16.0689316-6.2132874h7.4130211v27.8952179    c0,7.4214249-2.0164146,13.917305-5.0082703,17.4903412h32.2450714    c-2.9855957-3.5766602-4.9973984-10.0643082-4.9973984-17.476181V58.3901596h7.413353    c6.8214645,0,12.7873917,2.507843,16.0689316,6.2132874V40.607338H42.1017799z" fill="#333333" fill-rule="evenodd"/>
+  </g>
+</g>
+</svg>

@@ -1,0 +1,7 @@
+<Project>
+  <!-- Apply to referenced projects too, so their PDBs cannot become EXE sidecars. -->
+  <PropertyGroup Condition="'$(StandaloneRelease)' == 'true'">
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+</Project>

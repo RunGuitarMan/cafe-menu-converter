@@ -1,0 +1,20 @@
+<Project>
+  <!-- Explicit release contract shared by both publishing scripts. -->
+  <PropertyGroup Condition="'$(StandaloneRelease)' == 'true'">
+    <SelfContained>true</SelfContained>
+    <UseAppHost>true</UseAppHost>
+    <RuntimeFrameworkVersion>10.0.12</RuntimeFrameworkVersion>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract Condition="'$(RuntimeIdentifier)' == 'win-x64'">true</IncludeNativeLibrariesForSelfExtract>
+    <IncludeNativeLibrariesForSelfExtract Condition="'$(RuntimeIdentifier)' != 'win-x64'">false</IncludeNativeLibrariesForSelfExtract>
+    <PublishTrimmed>false</PublishTrimmed>
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <Target Name="ValidateStandaloneRelease" BeforeTargets="PrepareForPublish" Condition="'$(StandaloneRelease)' == 'true'">
+    <Error Condition="'$(RuntimeIdentifier)' != 'win-x64' and '$(RuntimeIdentifier)' != 'osx-arm64' and '$(RuntimeIdentifier)' != 'osx-x64'" Text="Unsupported standalone release RuntimeIdentifier." />
+    <Error Condition="'$(SelfContained)' != 'true' or '$(PublishSingleFile)' != 'true' or '$(UseAppHost)' != 'true' or '$(PublishTrimmed)' != 'false'" Text="Standalone releases must include the runtime and apphost, use single-file publishing, and disable trimming." />
+    <Error Condition="'$(RuntimeIdentifier)' == 'win-x64' and '$(IncludeNativeLibrariesForSelfExtract)' != 'true'" Text="Windows releases must embed native libraries in the EXE." />
+    <Error Condition="'$(RuntimeIdentifier)' != 'win-x64' and '$(IncludeNativeLibrariesForSelfExtract)' != 'false'" Text="macOS native libraries must remain inside the signed app bundle." />
+  </Target>
+</Project>

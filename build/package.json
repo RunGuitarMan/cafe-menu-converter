@@ -1,0 +1,6 @@
+{
+  "name": "cafe-menu-converter-icon-tools",
+  "private": true,
+  "description": "Development-only SVG to PNG/ICO/ICNS generation",
+  "dependencies": { "sharp": "0.35.5" }
+}

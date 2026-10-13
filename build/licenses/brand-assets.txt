@@ -1,0 +1,36 @@
+Brand assets used at the project owner's request.
+Logo source: https://www.tbank.ru/about/brand/
+Shield/T paths: https://cdn.tbank.ru/static/pfa-multimedia/images/e3283f8b-eeb6-4471-9ea7-965ff52435f1.svg
+The pistachio background pattern was created for CafeMenuConverter.
+These brand assets are not covered by the open-source component licenses.
+Fonts were losslessly decompressed from WOFF2 into TTF; glyphs and name tables are unchanged.
+
+NeueHaasUnicaW1G-Bold
+Source: https://cdn.tbank.ru/frontend-libraries/npm/react-kit-font/1.0.0/NeueHaasUnicaW1G-Bold.woff2
+Copyright © 2016 Monotype Imaging Inc. All rights reserved.
+https://www.myfonts.com/viewlicense?lid=Array
+
+NeueHaasUnicaW1G-Medium
+Source: https://cdn.tbank.ru/frontend-libraries/npm/react-kit-font/1.0.0/NeueHaasUnicaW1G-Medium.woff2
+Copyright © 2016 Monotype Imaging Inc. All rights reserved.
+https://www.myfonts.com/viewlicense?lid=Array
+
+NeueHaasUnicaW1G-Regular
+Source: https://cdn.tbank.ru/frontend-libraries/npm/react-kit-font/1.0.0/NeueHaasUnicaW1G-Regular.woff2
+Copyright © 2016 Monotype Imaging Inc. All rights reserved.
+https://www.myfonts.com/viewlicense?lid=Array
+
+TinkoffSans
+Source: https://cdn.tbank.ru/frontend-libraries/npm/react-kit-font/1.0.0/TinkoffSans.woff2
+Copyright (c) 2025 JSC TBank. All rights reserved.
+This typeface is the sole property of JSC TBank must not be used by anyone outside IPJSC T-TECHNOLOGIES Group of Companies without a prior written authorization by JSC TBank.
+
+TinkoffSans_Bold
+Source: https://cdn.tbank.ru/frontend-libraries/npm/react-kit-font/1.0.0/TinkoffSans_Bold.woff2
+Copyright (c) 2025 JSC TBank. All rights reserved.
+This typeface is the sole property of JSC TBank must not be used by anyone outside IPJSC T-TECHNOLOGIES Group of Companies without a prior written authorization by JSC TBank.
+
+TinkoffSans_Medium
+Source: https://cdn.tbank.ru/frontend-libraries/npm/react-kit-font/1.0.0/TinkoffSans_Medium.woff2
+Copyright (c) 2025 JSC TBank. All rights reserved.
+This typeface is the sole property of JSC TBank must not be used by anyone outside IPJSC T-TECHNOLOGIES Group of Companies without a prior written authorization by JSC TBank.

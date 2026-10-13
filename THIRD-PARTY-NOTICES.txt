@@ -17,3 +17,8 @@ https://github.com/dotnet/Open-XML-SDK
 https://github.com/mono/SkiaSharp
 https://github.com/kekekeks/MicroCom
 https://github.com/tmds/Tmds.DBus
+
+Brand assets and fonts requested for this application:
+T-Bank shield/T mark and T-Sans — JSC TBank.
+Neue Haas Unica W1G — Monotype Imaging Inc.
+Sources, copyrights and embedded font notices: licenses/brand-assets.txt.

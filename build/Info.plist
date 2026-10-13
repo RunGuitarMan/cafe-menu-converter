@@ -5,9 +5,10 @@
   <key>CFBundleDisplayName</key><string>Конвертер меню</string>
   <key>CFBundleIdentifier</key><string>local.cafemenuconverter.app</string>
   <key>CFBundleExecutable</key><string>CafeMenuConverter.App</string>
+  <key>CFBundleIconFile</key><string>AppIcon.icns</string>
   <key>CFBundlePackageType</key><string>APPL</string>
-  <key>CFBundleShortVersionString</key><string>1.0.0</string>
-  <key>CFBundleVersion</key><string>1</string>
+  <key>CFBundleShortVersionString</key><string>1.1.0</string>
+  <key>CFBundleVersion</key><string>4</string>
   <key>NSHighResolutionCapable</key><true/>
-  <key>LSMinimumSystemVersion</key><string>12.0</string>
+  <key>LSMinimumSystemVersion</key><string>14.0</string>
 </dict></plist>
