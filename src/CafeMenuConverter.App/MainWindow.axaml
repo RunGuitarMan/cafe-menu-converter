@@ -1,0 +1,63 @@
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:CafeMenuConverter.App" xmlns:model="using:CafeMenuConverter.Core.Model"
+        x:Class="CafeMenuConverter.App.MainWindow" x:DataType="local:MainViewModel"
+        Title="Кафе · Конвертер меню" Width="1060" Height="820" MinWidth="800" MinHeight="680"
+        Background="#F5F4F0" FontFamily="Segoe UI, Arial" FontSize="14">
+  <Grid RowDefinitions="Auto,Auto,Auto,*" Margin="24" RowSpacing="14">
+    <Grid ColumnDefinitions="*,Auto">
+      <StackPanel Spacing="5">
+        <TextBlock Text="Меню в таблицу" FontSize="28" FontWeight="Bold" Foreground="#232822"/>
+        <TextBlock Text="PDF завтрака или обеда → XLSX для загрузки" Foreground="#62685F"/>
+      </StackPanel>
+      <Border Grid.Column="1" Background="#FFD14A" CornerRadius="8" Padding="17,11" VerticalAlignment="Center">
+        <TextBlock Text="КАФЕ" FontWeight="Bold" FontSize="18"/>
+      </Border>
+    </Grid>
+    <Border Grid.Row="1" Background="White" BorderBrush="#DEDCD4" BorderThickness="1" CornerRadius="12" Padding="18" DragDrop.AllowDrop="True" Name="DropArea">
+      <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="14" IsEnabled="{Binding IsIdle}">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+          <StackPanel><TextBlock Text="1. PDF меню" Classes="label"/>
+            <TextBox Text="{Binding InputPath}" Watermark="Выберите файл или перетащите его сюда" Name="InputPathBox"/>
+          </StackPanel>
+          <Button Grid.Column="1" Content="Выбрать…" VerticalAlignment="Bottom" Click="ChoosePdf"/>
+        </Grid>
+        <Grid Grid.Row="1" ColumnDefinitions="190,*,Auto" ColumnSpacing="16">
+          <StackPanel><TextBlock Text="2. Офис" Classes="label"/>
+            <ComboBox ItemsSource="{Binding Offices}" SelectedItem="{Binding SelectedOffice}" PlaceholderText="Выберите офис" HorizontalAlignment="Stretch" MinHeight="42" Name="OfficeBox"/>
+          </StackPanel>
+          <StackPanel Grid.Column="1"><TextBlock Text="3. Куда сохранить XLSX" Classes="label"/>
+            <TextBox Text="{Binding OutputPath}" Watermark="По умолчанию — рядом с PDF" Name="OutputPathBox"/>
+          </StackPanel>
+          <Button Grid.Column="2" Content="Изменить…" VerticalAlignment="Bottom" Click="ChooseOutput"/>
+        </Grid>
+        <TextBlock Grid.Row="2" Text="Обработка на вашем компьютере. Названия, состав и категории — как в меню." TextWrapping="Wrap" Foreground="#62685F" FontSize="12"/>
+      </Grid>
+    </Border>
+    <StackPanel Grid.Row="2" Spacing="10">
+      <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12">
+        <Button Content="Конвертировать" Click="Convert" IsEnabled="{Binding CanConvert}" Background="#FFD14A" Foreground="#232822" FontWeight="Bold" Name="ConvertButton"/>
+        <Button Grid.Column="1" Content="Отмена" Click="Cancel" IsVisible="{Binding IsBusy}"/>
+        <Button Grid.Column="3" Content="Открыть папку" Click="OpenFolder" IsEnabled="{Binding CanOpenFolder}"/>
+      </Grid>
+      <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Height="3"/>
+      <SelectableTextBlock Text="{Binding Status}" TextWrapping="Wrap" Foreground="#394234"/>
+    </StackPanel>
+    <Border Grid.Row="3" Background="White" BorderBrush="#DEDCD4" BorderThickness="1" CornerRadius="12" Padding="12">
+      <TabControl FontSize="14">
+        <TabItem Header="Сводка"><ScrollViewer Margin="10"><SelectableTextBlock Text="{Binding Summary}" TextWrapping="Wrap"/></ScrollViewer></TabItem>
+        <TabItem Header="Блюда">
+          <DataGrid ItemsSource="{Binding Items}" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True" GridLinesVisibility="Horizontal" Margin="0,8,0,0">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}" Width="110"/>
+              <DataGridTextColumn Header="Раздел" Binding="{Binding Category}" Width="190"/>
+              <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="450"/>
+              <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="80"/>
+              <DataGridTextColumn Header="Стр." Binding="{Binding Page}" Width="60"/>
+            </DataGrid.Columns>
+          </DataGrid>
+        </TabItem>
+        <TabItem Header="Диагностика"><ScrollViewer Margin="10"><SelectableTextBlock Text="{Binding Diagnostics}" TextWrapping="Wrap"/></ScrollViewer></TabItem>
+      </TabControl>
+    </Border>
+  </Grid>
+</Window>

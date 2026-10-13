@@ -1,0 +1,19 @@
+CafeMenuConverter uses the following open-source components:
+
+.NET runtime and System libraries — Microsoft and .NET contributors (MIT).
+Avalonia / DataGrid — Copyright 2013-2026 The AvaloniaUI Project (MIT).
+PdfPig — UglyToad / PdfPig contributors (Apache-2.0).
+DocumentFormat.OpenXml — Microsoft Corporation (MIT).
+SkiaSharp / HarfBuzzSharp — Microsoft Corporation and respective contributors
+(MIT bindings; native components carry their own notices).
+MicroCom.Runtime — Copyright 2021 Nikita Tsukanov (MIT).
+Tmds.DBus.Protocol — Tom Deseyn (MIT).
+
+License texts and native library notices are distributed in the licenses folder.
+Sources: https://github.com/dotnet/runtime
+https://github.com/AvaloniaUI/Avalonia
+https://github.com/UglyToad/PdfPig
+https://github.com/dotnet/Open-XML-SDK
+https://github.com/mono/SkiaSharp
+https://github.com/kekekeks/MicroCom
+https://github.com/tmds/Tmds.DBus

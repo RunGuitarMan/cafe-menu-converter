@@ -4,7 +4,7 @@ using UglyToad.PdfPig.Content;
 namespace CafeMenuConverter.Core.Pdf;
 
 /// <summary>Слово страницы. Координаты в pt, Y отсчитывается сверху страницы (как при чтении).</summary>
-public sealed record TextWord(string Text, double X0, double X1, double Baseline, double FontSize, bool IsWhite)
+public sealed record TextWord(string Text, double X0, double X1, double Baseline, double FontSize, bool IsWhite, string FontName = "")
 {
     public double CenterX => (X0 + X1) / 2;
 
@@ -23,18 +23,21 @@ public static class PdfTextReader
     private const double MinLetterGapEm = -0.5;
     private const double BaselineTolerance = 0.5;
 
-    public static IReadOnlyList<TextPage> Read(string path)
+    public static IReadOnlyList<TextPage> Read(string path, CancellationToken cancellationToken = default)
     {
         using var stream = File.OpenRead(path);
-        return Read(stream);
+        return Read(stream, cancellationToken);
     }
 
-    public static IReadOnlyList<TextPage> Read(Stream stream)
+    public static IReadOnlyList<TextPage> Read(Stream stream, CancellationToken cancellationToken = default)
     {
         using var document = PdfDocument.Open(stream);
         var pages = new List<TextPage>(document.NumberOfPages);
         foreach (var page in document.GetPages())
+        {
+            cancellationToken.ThrowIfCancellationRequested();
             pages.Add(new TextPage(page.Number, page.Width, page.Height, ExtractWords(page)));
+        }
         return pages;
     }
 
@@ -76,6 +79,8 @@ public static class PdfTextReader
             return false;
         if (IsWhite(previous) != IsWhite(next))
             return false;
+        if (previous.FontName != next.FontName)
+            return false;
 
         var gap = next.StartBaseLine.X - previous.EndBaseLine.X;
         var em = Math.Max(1.0, next.PointSize);
@@ -91,7 +96,8 @@ public static class PdfTextReader
             X1: letters.Max(l => l.BoundingBox.Right),
             Baseline: pageHeight - first.StartBaseLine.Y,
             FontSize: Size(first),
-            IsWhite: IsWhite(first));
+            IsWhite: IsWhite(first),
+            FontName: first.FontName ?? "");
     }
 
     private static double Size(Letter letter) => Math.Round(letter.PointSize, 1);
